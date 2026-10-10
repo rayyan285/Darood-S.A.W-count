@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درود شریف کاؤنٹر - Global Darood Sharif Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0b4f6c;
+            --secondary-color: #01baef;
+            --accent-color: #f7b32b;
+            --dark-color: #2b2d42;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Nastaliq Urdu', 'Amiri', serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .header {
+            background: linear-gradient(135deg, #0b4f6c 0%, #01579b 100%);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        .dome-icon {
+            font-size: 55px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(247, 179, 43, 0.4);
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 25px;
+        }
+        /* Auth Screen */
+        #auth-screen {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus {
+            border-color: var(--secondary-color);
+        }
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .btn:hover {
+            background: #093a4f;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-accent {
+            background: var(--accent-color);
+            color: var(--dark-color);
+        }
+        .btn-accent:hover {
+            background: #e09f1f;
+        }
+        .btn-danger {
+            background: #d9534f;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c9302c;
+        }
+        /* Main Dashboard */
+        #dashboard {
+            display: none;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid #80deea;
+        }
+        .stats-card h3 {
+            font-size: 16px;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        .counter-display {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+        .target-text {
+            font-size: 13px;
+            color: #555;
+        }
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+            width: 100%;
+            margin: 15px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+            height: 100%;
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .progress-percentage {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+            text-align: center;
+        }
+        .action-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e9ecef;
+        }
+        .quick-btns {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .quick-btn {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover, .quick-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        .admin-access-btn {
+            background: transparent;
+            border: none;
+            color: #666;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: underline;
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+        }
+        #admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: right;
+        }
+        th, td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: var(--primary-color);
+            color: white;
+        }
+        .user-info-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eef2f3;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .logout-link {
+            color: #d9534f;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 12px;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="dome-icon">🕌</div>
+        <h1>درود شریف کاؤنٹر</h1>
+        <p id="header-target-desc">عالمگیر درود پاک مہم</p>
+    </div>
+
+    <div class="content">
+        <!-- 1. AUTH SCREEN -->
+        <div id="auth-screen">
+            <h3 style="margin-bottom: 15px; color: var(--primary-color);">خوش آمدید</h3>
+            <p style="font-size: 14px; margin-bottom: 20px; color: #666;">کاؤنٹر استعمال کرنے کے لیے اپنا نام اور رابطہ درج کریں</p>
+            <div class="form-group">
+                <label>پورا نام (Full Name)</label>
+                <input type="text" id="user-name" class="form-control" placeholder="مثلاً: محمد ریان">
+            </div>
+            <div class="form-group">
+                <label>فون نمبر یا جی میل (Phone or Email)</label>
+                <input type="text" id="user-contact" class="form-control" placeholder="مثلاً: 03001234567">
+            </div>
+            <button class="btn" onclick="registerUser()">شامل ہوں / Continue</button>
+        </div>
+
+        <!-- 2. MAIN DASHBOARD -->
+        <div id="dashboard">
+            <div class="user-info-bar">
+                <span id="display-username">خوش آمدید، صارف</span>
+                <span class="logout-link" onclick="logoutUser()">لاگ آؤٹ</span>
+            </div>
+
+            <div class="stats-card">
+                <h3>مجموعی عالمی تعداد (Global Cumulative Count)</h3>
+                <div class="counter-display" id="global-counter">0</div>
+                <div class="target-text" id="target-display-text">ہدف: 1,000,000,000 درود شریف</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-percentage" id="progress-text">0.0000% مکمل</div>
+            </div>
+
+            <div class="action-section">
+                <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--primary-color);">➕ درود شریف شامل کریں</h3>
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="setCount(100)">+100</button>
+                    <button class="quick-btn" onclick="setCount(500)">+500</button>
+                    <button class="quick-btn" onclick="setCount(1000)">+1,000</button>
+                    <button class="quick-btn" onclick="setCount(5000)">+5,000</button>
+                </div>
+                <div class="form-group">
+                    <label>اپنے پڑھے ہوئے درود کی تعداد لکھیں:</label>
+                    <input type="number" id="custom-count" class="form-control" placeholder="تعداد درج کریں">
+                </div>
+                <button class="btn btn-accent" onclick="submitDarood()">شامل کریں (Submit Count)</button>
+            </div>
+
+            <div style="text-align: center; background: #fff3cd; padding: 12px; border-radius: 10px; border: 1px solid #ffeeba; font-size: 14px;">
+                آپ کا ذاتی کل حصہ: <strong id="personal-counter">0</strong> درود پاک
+            </div>
+
+            <button class="admin-access-btn" onclick="openAdminLogin()">🛡️ ایڈمن ایکسیس (Admin Panel)</button>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="admin-modal">
+    <div class="modal-content">
+        <h3 style="color: var(--primary-color); margin-bottom: 15px;">ایڈمن کنٹرول پینل</h3>
+        
+        <div id="admin-login-box">
+            <p style="font-size: 13px; margin-bottom: 10px;">انتظامیہ پینل تک رسائی کے لیے پاسورڈ درج کریں:</p>
+            <div class="form-group">
+                <input type="password" id="admin-pass-input" class="form-control" placeholder="Passcode">
+            </div>
+            <button class="btn" onclick="verifyAdmin()">لاگ ان کریں</button>
+            <button class="btn" style="background: #ccc; margin-top: 10px; color: #333;" onclick="closeAdminModal()">بند کریں</button>
+        </div>
+
+        <div id="admin-panel-box" style="display: none;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px;">
+                <span>سٹیٹس: <strong style="color: green;">آن لائن</strong></span>
+                <span class="logout-link" onclick="adminLogout()">لاگ آؤٹ ایڈمن</span>
+            </div>
+
+            <!-- Goal Adjustment -->
+            <div class="form-group" style="background: #eef2f3; padding: 12px; border-radius: 10px;">
+                <label>نیا عالمی ہدف (Goal Target) سیٹ کریں:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="admin-goal-input" class="form-control" placeholder="مثلاً: 1000000">
+                    <button class="btn" style="width: auto; white-space: nowrap;" onclick="updateTargetGoal()">اپ ڈیٹ ہدف</button>
+                </div>
+            </div>
+
+            <!-- Manual Add/Sub -->
+            <div class="form-group">
+                <label>کل کاؤنٹر میں اضافہ یا کمی:</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="number" id="admin-adjust-num" class="form-control" placeholder="مقدار">
+                    <button class="btn" style="width: auto;" onclick="adjustGlobal('add')">جمع (+)</button>
+                    <button class="btn btn-danger" style="width: auto;" onclick="adjustGlobal('sub')">نفی (-)</button>
+                </div>
+            </div>
+
+            <!-- Reset Options -->
+            <div class="form-group" style="margin-top: 15px;">
+                <button class="btn btn-danger" onclick="resetGlobalCounter()">🔄 تمام عالمی کاؤنٹر ری سیٹ کریں (Reset)</button>
+            </div>
+
+            <h4 style="margin-top: 20px; font-size: 14px; color: var(--primary-color);">رجسٹرڈ صارفین کی فہرست:</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>رابطہ</th>
+                            <th>کل درود</th>
+                            <th>عمل</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                    </tbody>
+                </table>
+            </div>
+
+            <button class="btn" style="margin-top: 20px; background: #6c757d;" onclick="closeAdminModal()">بند کریں</button>
+        </div>
+    </div>
+</div>
+
+<div class="footer-note">
+    ⭐ صَلَّى اللّٰهُ عَلَيْهِ وَآلِهِ وَسَلَّمَ ⭐<br>
+    جزاک اللہ خیراً - اللہ پاک اس سعی کو قبول فرمائے
+</div>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('darood_db')) || {
+        globalCount: 0,
+        targetGoal: 1000000000,
+        users: []
+    };
+
+    if(!db.targetGoal) {
+        db.targetGoal = 1000000000;
+    }
+
+    let currentUserContact = localStorage.getItem('darood_current_user') || null;
+
+    window.onload = function() {
+        if(currentUserContact) {
+            let user = db.users.find(u => u.contact === currentUserContact);
+            if(user) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('display-username').innerText = `خوش آمدید، ${user.name}`;
+                updateDisplay();
+            }
+        }
+    }
+
+    function registerUser() {
+        let name = document.getElementById('user-name').value.trim();
+        let contact = document.getElementById('user-contact').value.trim();
+
+        if(!name || !contact) {
+            alert('براہ کرم اپنا نام اور رابطہ نمبر درج کریں۔');
+            return;
+        }
+
+        let user = db.users.find(u => u.contact === contact);
+        if(!user) {
+            user = { name: name, contact: contact, total: 0 };
+            db.users.push(user);
+        } else {
+            user.name = name;
+        }
+
+        localStorage.setItem('darood_db', JSON.stringify(db));
+        localStorage.setItem('darood_current_user', contact);
+        currentUserContact = contact;
+
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('display-username').innerText = `خوش آمدید، ${user.name}`;
+        updateDisplay();
+    }
+
+    function logoutUser() {
+        localStorage.removeItem('darood_current_user');
+        currentUserContact = null;
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('auth-screen').style.display = 'block';
+    }
+
+    function setCount(val) {
+        document.getElementById('custom-count').value = val;
+    }
+
+    function submitDarood() {
+        let countInput = parseInt(document.getElementById('custom-count').value);
+        if(isNaN(countInput) || countInput <= 0) {
+            alert('براہ کرم درود شریف کی درست تعداد درج کریں۔');
+            return;
+        }
+
+        let user = db.users.find(u => u.contact === currentUserContact);
+        if(user) {
+            user.total += countInput;
+            db.globalCount += countInput;
+            localStorage.setItem('darood_db', JSON.stringify(db));
+            updateDisplay();
+            document.getElementById('custom-count').value = '';
+            alert('جزاک اللہ! آپ کا ہدیہ درود قبول ہو گیا۔');
+        }
+    }
+
+    function updateDisplay() {
+        document.getElementById('global-counter').innerText = db.globalCount.toLocaleString();
+        document.getElementById('target-display-text').innerText = `ہدف: ${db.targetGoal.toLocaleString()} درود شریف`;
+
+        let user = db.users.find(u => u.contact === currentUserContact);
+        if(user) {
+            document.getElementById('personal-counter').innerText = user.total.toLocaleString();
+        }
+
+        let percentage = (db.globalCount / db.targetGoal) * 100;
+        if(percentage > 100) percentage = 100;
+        document.getElementById('progress-bar').style.width = percentage + '%';
+        document.getElementById('progress-text').innerText = percentage.toFixed(4) + '% مکمل';
+    }
+
+    function openAdminLogin() {
+        document.getElementById('admin-modal').style.display = 'flex';
+        document.getElementById('admin-login-box').style.display = 'block';
+        document.getElementById('admin-panel-box').style.display = 'none';
+        document.getElementById('admin-pass-input').value = '';
+    }
+
+    function closeAdminModal() {
+        document.getElementById('admin-modal').style.display = 'none';
+    }
+
+    function verifyAdmin() {
+        let pass = document.getElementById('admin-pass-input').value;
+        if(pass === 'ALBURHAN CAPITAL 2026') {
+            document.getElementById('admin-login-box').style.display = 'none';
+            document.getElementById('admin-panel-box').style.display = 'block';
+            document.getElementById('admin-goal-input').value = db.targetGoal;
+            loadAdminTable();
+        } else {
+            alert('غلط پاسورڈ! دوبارہ کوشش کریں۔');
+        }
+    }
+
+    function adminLogout() {
+        document.getElementById('admin-panel-box').style.display = 'none';
+        document.getElementById('admin-login-box').style.display = 'block';
+    }
+
+    function loadAdminTable() {
+        let tbody = document.getElementById('users-table-body');
+        tbody.innerHTML = '';
+
+        if(db.users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">کوئی صارف رجسٹرڈ نہیں ہے۔</td></tr>';
+            return;
+        }
+
+        db.users.forEach((u, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${u.name}</td>
+                <td>${u.contact}</td>
+                <td>${u.total.toLocaleString()}</td>
+                <td><button onclick="deleteUser(${index})" style="background:#d9534f; color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;">حذف</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function adjustGlobal(type) {
+        let val = parseInt(document.getElementById('admin-adjust-num').value);
+        if(isNaN(val)) return;
+
+        if(type === 'add') {
+            db.globalCount += val;
+        } else if(type === 'sub') {
+            db.globalCount -= val;
+            if(db.globalCount < 0) db.globalCount = 0;
+        }
+
+        localStorage.setItem('darood_db', JSON.stringify(db));
+        updateDisplay();
+        document.getElementById('admin-adjust-num').value = '';
+        alert('عالمی کاؤنٹر کامیابی سے اپ ڈیٹ ہو گیا ہے۔');
+    }
+
+    function updateTargetGoal() {
+        let newGoal = parseInt(document.getElementById('admin-goal-input').value);
+        if(isNaN(newGoal) || newGoal <= 0) {
+            alert('براہ کرم درست ہدف درج کریں۔');
+            return;
+        }
+        db.targetGoal = newGoal;
+        localStorage.setItem('darood_db', JSON.stringify(db));
+        updateDisplay();
+        alert('نیا ہدف کامیابی سے محفوظ ہو گیا ہے۔');
+    }
+
+    function resetGlobalCounter() {
+        if(confirm('کیا آپ واقعی عالمی کاؤنٹر اور تمام صارف ریکارڈز کو ری سیٹ (صفر) کرنا چاہتے ہیں؟')) {
+            db.globalCount = 0;
+            db.users.forEach(u => u.total = 0);
+            localStorage.setItem('darood_db', JSON.stringify(db));
+            updateDisplay();
+            loadAdminTable();
+            alert('کاؤنٹر کامیابی سے ری سیٹ کر دیا گیا ہے۔');
+        }
+    }
+
+    function deleteUser(index) {
+        if(confirm('کیا آپ واقعی اس صارف کو حذف کرنا چاہتے ہیں؟')) {
+            db.users.splice(index, 1);
+            localStorage.setItem('darood_db', JSON.stringify(db));
+            loadAdminTable();
+            updateDisplay();
+        }
+    }
+</script>
+
+</body>
+</html>
